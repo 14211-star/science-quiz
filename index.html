@@ -519,7 +519,7 @@
             { id:5, type:'text-choice', title:'魚類呼吸', content:'<p>魚類用什麼呼吸？</p>', options:[{label:'A',value:'A',text:'肺'},{label:'B',value:'B',text:'皮膚'},{label:'C',value:'C',text:'鰓'},{label:'D',value:'D',text:'氣管'}], correctAnswer:{q:'C'}, createdAt:Date.now() },
             { id:6, type:'text-choice', title:'自然資源', content:'<p>下列哪一個是「自然資源」？</p>', options:[{label:'A',value:'A',text:'塑膠'},{label:'B',value:'B',text:'玻璃'},{label:'C',value:'C',text:'陽光'},{label:'D',value:'D',text:'鋼鐵'}], correctAnswer:{q:'C'}, createdAt:Date.now() },
             { id:7, type:'text-choice', title:'太陽軌跡', content:'<p>一天中，太陽在天空中的位置怎樣變化？</p>', options:[{label:'A',value:'A',text:'從東邊升起，西邊落下'},{label:'B',value:'B',text:'從西邊升起，東邊落下'},{label:'C',value:'C',text:'一直停在頭頂'},{label:'D',value:'D',text:'從北邊移到南邊'}], correctAnswer:{q:'A'}, createdAt:Date.now() },
-            { id:8, type:'fill-blank', title:'水的三態', content:'<p>水的三態分為固體、______ 和氣體。</p><input type="text" name="q" placeholder="請填入答案" style="width:250px;">', correctAnswer:{q:'液態'}, multiAnswers:{q:['液態','液體']}, createdAt:Date.now() },
+            { id:8, type:'fill-blank', title:'水的三態', content:'<p>水的三態分為固體、______ 和氣體。</p>', correctAnswer:{q:'液態'}, multiAnswers:{q:['液態','液體']}, createdAt:Date.now() },
             { id:9, type:'text-choice', title:'昆蟲', content:'<p>下列哪一種動物是「昆蟲」？</p>', options:[{label:'A',value:'A',text:'蜘蛛'},{label:'B',value:'B',text:'蜜蜂'},{label:'C',value:'C',text:'蜈蚣'},{label:'D',value:'D',text:'蝸牛'}], correctAnswer:{q:'B'}, createdAt:Date.now() },
             { id:10, type:'text-choice', title:'雨衣材料', content:'<p>哪一種材料最適合用來做雨衣？</p>', options:[{label:'A',value:'A',text:'棉布'},{label:'B',value:'B',text:'塑膠'},{label:'C',value:'C',text:'紙'},{label:'D',value:'D',text:'木頭'}], correctAnswer:{q:'B'}, createdAt:Date.now() },
             { id:11, type:'short-answer', title:'月亮發光', content:'<p>月亮會發光嗎？請簡單說明。</p><textarea name="q" rows="2" placeholder="寫下你的想法..." style="width:100%;"></textarea>', correctAnswer:{q:''}, createdAt:Date.now() },
@@ -1580,10 +1580,22 @@
                 const name = inp.getAttribute('name');
                 if (name && stored[name] !== undefined) inp.value = stored[name];
             });
-            if (!temp.querySelector('input, textarea')) {
-                bodyHtml += '<input type="text" name="q" placeholder="請填入答案" style="width:90%;max-width:400px;padding:12px 16px;font-size:1.1rem;border:2px solid #cbd5e1;border-radius:30px;margin-top:10px;">';
-            } else {
+            // Check if content has ______ pattern → replace inline
+            const hasPlaceholder = q.content.includes('______');
+            if (hasPlaceholder) {
+                const inlineInput = '<input type="text" name="q" placeholder="輸入答案" style="display:inline-block;width:120px;padding:6px 12px;font-size:1.1rem;border:none;border-bottom:3px solid #1e6fd9;background:transparent;outline:none;text-align:center;margin:0 4px;" class="fill-inline">';
+                bodyHtml = q.content.replace(/_{2,}/g, inlineInput);
+                // Restore stored value
+                if (stored.q !== undefined) {
+                    setTimeout(() => {
+                        const inp = document.querySelector('#questionBody_' + currentIndex + ' .fill-inline');
+                        if (inp) inp.value = stored.q;
+                    }, 0);
+                }
+            } else if (temp.querySelector('input, textarea')) {
                 bodyHtml = temp.innerHTML;
+            } else {
+                bodyHtml += '<input type="text" name="q" placeholder="請填入答案" style="width:90%;max-width:400px;padding:12px 16px;font-size:1.1rem;border:2px solid #cbd5e1;border-radius:30px;margin-top:10px;">';
             }
         } else if (q.type === 'short-answer') {
             bodyHtml += q.content;
