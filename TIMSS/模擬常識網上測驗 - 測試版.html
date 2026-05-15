@@ -502,7 +502,7 @@
 
     function buildSeedQuestions() {
         return [
-            { id:1, type:'image-choice', title:'辨認動物', content:'<p><strong>圖中是甚麼種類的動物？</strong></p><img src="https://i.pinimg.com/736x/08/30/45/0830457efcb9967453099414443272a8.jpg" class="q-image" alt="動物圖"><p>請選擇正確的分類：</p>', options:[{label:'A',value:'A',text:'鳥類'},{label:'B',value:'B',text:'哺乳類'},{label:'C',value:'C',text:'魚類'},{label:'D',value:'D',text:'昆蟲'}], correctAnswer:{q:'B'}, createdAt:Date.now() },
+            { id:1, type:'image-choice', title:'辨認動物', content:'<p><strong>圖中是甚麼種類的動物？</strong></p><p>請選擇正確的分類：</p>', image:'https://i.pinimg.com/736x/08/30/45/0830457efcb9967453099414443272a8.jpg', options:[{label:'A',value:'A',text:'鳥類'},{label:'B',value:'B',text:'哺乳類'},{label:'C',value:'C',text:'魚類'},{label:'D',value:'D',text:'昆蟲'}], correctAnswer:{q:'B'}, createdAt:Date.now() },
             { id:2, type:'text-choice', title:'光合作用', content:'<p>植物的哪個部分通常進行光合作用？</p>', options:[{label:'A',value:'A',text:'根'},{label:'B',value:'B',text:'莖'},{label:'C',value:'C',text:'葉'},{label:'D',value:'D',text:'花'}], correctAnswer:{q:'C'}, createdAt:Date.now() },
             { id:3, type:'short-answer', title:'水的蒸發', content:'<p>一杯水放在桌上，三天後水位變低了。水去哪裡了？請寫出你的想法。</p><textarea name="q" rows="3" placeholder="請輸入你的想法..." style="width:100%;"></textarea>', correctAnswer:{q:''}, createdAt:Date.now() },
             { id:4, type:'text-choice', title:'重力', content:'<p>下面哪一種力會把物體往地面拉？</p>', options:[{label:'A',value:'A',text:'磁力'},{label:'B',value:'B',text:'摩擦力'},{label:'C',value:'C',text:'重力'},{label:'D',value:'D',text:'彈力'}], correctAnswer:{q:'C'}, createdAt:Date.now() },
@@ -1442,6 +1442,9 @@
 
         if (q.type === 'image-choice' || q.type === 'text-choice') {
             bodyHtml += q.content;
+            if (q.image) {
+                bodyHtml += `<img src="${q.image}" class="q-image" alt="題目圖片">`;
+            }
             if (q.options) {
                 q.options.forEach(o => {
                     const checked = stored.q === o.value ? 'checked' : '';
@@ -1453,9 +1456,6 @@
                         ${o.image ? `<img src="${o.image}" class="opt-image" alt="選項圖片">` : ''}
                     </label>`;
                 });
-            }
-            if (q.image) {
-                bodyHtml += `<img src="${q.image}" class="q-image" alt="題目圖片">`;
             }
         } else if (q.type === 'fill-blank') {
             const temp = document.createElement('div');
