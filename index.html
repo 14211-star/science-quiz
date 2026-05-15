@@ -292,7 +292,6 @@
             <button class="admin-tab active" data-tab="bank">📚 題庫管理</button>
             <button class="admin-tab" data-tab="test">📝 出題設定</button>
             <button class="admin-tab" data-tab="results">📊 考試結果</button>
-            <button class="admin-tab" data-tab="github">⚙️ GitHub</button>
         </div>
         <div class="admin-content">
             <!-- 題庫管理 -->
@@ -305,6 +304,7 @@
                     <button id="importXLSXBtn2" class="btn-success">📥 匯入 XLSX</button>
                     <button id="syncXLSXBtn" class="btn-success">🔄 從伺服器同步</button>
                     <input type="file" id="xlsxQFileInput" accept=".xlsx" style="display:none;">
+                    <button id="publishBtn" class="btn-success" style="background:#8e44ad;">📤 更新網站題庫</button>
                     <button id="resetBankBtn" class="btn-danger">重置題庫</button>
                 </div>
                 <table class="qb-table"><thead><tr><th>ID</th><th>題型</th><th>題目預覽</th><th>正確答案</th><th>操作</th></tr></thead><tbody id="bankTableBody"></tbody></table>
@@ -349,31 +349,6 @@
                     <div class="stat-card"><div class="num" id="resultCount">0</div><div class="label">已匯入學生</div></div>
                 </div>
                 <div id="resultsTableContainer"></div>
-            </div>
-            <!-- GitHub 設定 -->
-            <div id="tabGithub" class="admin-tab-content">
-                <div class="config-section">
-                    <h4>🔑 GitHub Token</h4>
-                    <p style="color:#5b7a94;font-size:0.9rem;margin-bottom:8px;">用於發佈題庫到 GitHub。需開啟 repo 的 Contents: write 權限。</p>
-                    <input type="password" id="ghTokenInput" placeholder="github_pat_..." style="width:100%;padding:12px 16px;border:2px solid #b8cadc;border-radius:16px;font-size:1rem;">
-                </div>
-                <div class="config-section">
-                    <h4>📦 倉儲名稱</h4>
-                    <p style="color:#5b7a94;font-size:0.9rem;margin-bottom:8px;">例如：14211-star/science-quiz</p>
-                    <input type="text" id="ghRepoInput" placeholder="username/repo" style="width:100%;padding:12px 16px;border:2px solid #b8cadc;border-radius:16px;font-size:1rem;">
-                </div>
-                <div class="config-section">
-                    <h4>📄 題庫檔案路徑</h4>
-                    <p style="color:#5b7a94;font-size:0.9rem;margin-bottom:8px;">預設為 questions.xlsx（放在 repo 根目錄）</p>
-                    <input type="text" id="ghPathInput" value="questions.xlsx" style="width:100%;padding:12px 16px;border:2px solid #b8cadc;border-radius:16px;font-size:1rem;">
-                </div>
-                <div class="config-section" style="display:flex;gap:12px;flex-wrap:wrap;">
-                    <button id="ghSaveBtn" class="btn-success" style="padding:12px 28px;border:none;border-radius:30px;cursor:pointer;font-weight:600;color:white;font-size:1.1rem;">💾 儲存設定</button>
-                    <button id="ghPublishBtn" class="btn-success" style="padding:12px 28px;border:none;border-radius:30px;cursor:pointer;font-weight:600;color:white;font-size:1.1rem;">📤 發佈到 GitHub</button>
-                    <button id="ghSyncBtn" class="btn-success" style="padding:12px 28px;border:none;border-radius:30px;cursor:pointer;font-weight:600;color:white;font-size:1.1rem;">🔄 從 GitHub 下載</button>
-                    <button id="ghTestBtn" style="padding:12px 28px;border:none;border-radius:30px;cursor:pointer;font-weight:600;font-size:1.1rem;background:#e0e5ec;color:#1e2b37;">🔍 測試連線</button>
-                </div>
-                <div id="ghStatus" style="margin-top:12px;padding:12px 16px;border-radius:16px;font-size:1rem;display:none;"></div>
             </div>
         </div>
     </div>
@@ -710,54 +685,18 @@
     //  4. ADMIN PANEL UI
     // ═══════════════════════════════════════════════════
 
-    // ─── GitHub Functions ───
+    // ─── Quick Publish (一鍵發佈到 GitHub) ───
 
-    function renderGithubSettings() {
-        const gh = getGithubSettings();
-        document.getElementById('ghTokenInput').value = gh.token || '';
-        document.getElementById('ghRepoInput').value = gh.repo || '';
-        document.getElementById('ghPathInput').value = gh.path || 'questions.xlsx';
-    }
-
-    function saveGithubForm() {
-        const settings = {
-            token: document.getElementById('ghTokenInput').value.trim(),
-            repo: document.getElementById('ghRepoInput').value.trim(),
-            path: document.getElementById('ghPathInput').value.trim() || 'questions.xlsx'
-        };
-        saveGithubSettings(settings);
-        showGhStatus('✅ 設定已儲存', '#2a9d8f');
-    }
-
-    function showGhStatus(msg, color) {
-        const el = document.getElementById('ghStatus');
-        el.textContent = msg;
-        el.style.color = color || '#1a4e6f';
-        el.style.display = 'block';
-        el.style.background = color === '#c44536' ? '#fff0ee' : '#f0faf5';
-        el.style.border = '1px solid ' + (color || '#cfdeed');
-    }
-
-    async function testGithubConnection() {
-        const gh = getGithubSettings();
-        if (!gh.token || !gh.repo) { showGhStatus('❌ 請先填寫 Token 和倉儲名稱', '#c44536'); return; }
-        showGhStatus('🔄 測試連線中...', '#1e6fd9');
-        try {
-            const r = await fetch('https://api.github.com/repos/' + gh.repo, {
-                headers: { Authorization: 'Bearer ' + gh.token, Accept: 'application/vnd.github.v3+json' }
-            });
-            if (!r.ok) throw new Error('HTTP ' + r.status);
-            const data = await r.json();
-            showGhStatus('✅ 連線成功！倉儲：' + data.full_name + '（' + data.visibility + '）', '#2a9d8f');
-        } catch(e) {
-            showGhStatus('❌ 連線失敗：' + e.message, '#c44536');
+    function quickPublish() {
+        let gh = getGithubSettings();
+        if (!gh.token || !gh.repo) {
+            const token = prompt('請輸入 GitHub Token (第一次設定，之後會儲存)：');
+            if (!token) return;
+            const repo = prompt('請輸入倉儲名稱 (例如 14211-star/science-quiz)：');
+            if (!repo) return;
+            gh = { token: token.trim(), repo: repo.trim(), path: 'questions.xlsx' };
+            saveGithubSettings(gh);
         }
-    }
-
-    async function publishToGithub() {
-        const gh = getGithubSettings();
-        if (!gh.token || !gh.repo) { showGhStatus('❌ 請先儲存 GitHub 設定', '#c44536'); return; }
-        showGhStatus('🔄 正在產生題庫並上傳...', '#1e6fd9');
 
         // Generate XLSX
         const qb = getQuestionBank();
@@ -781,64 +720,34 @@
         XLSX.utils.book_append_sheet(wb, ws, '題庫');
         const xlsxBase64 = XLSX.write(wb, { type: 'base64' });
 
-        try {
-            // Check if file exists
-            const getUrl = 'https://api.github.com/repos/' + gh.repo + '/contents/' + gh.path;
-            let sha = '';
-            const getResp = await fetch(getUrl, {
-                headers: { Authorization: 'Bearer ' + gh.token, Accept: 'application/vnd.github.v3+json' }
-            });
-            if (getResp.ok) {
-                const existing = await getResp.json();
-                sha = existing.sha;
-            }
+        const btn = document.getElementById('publishBtn');
+        const origText = btn.textContent;
+        btn.textContent = '⏳ 上傳中...';
+        btn.disabled = true;
 
-            // Upload file
-            const body = { message: 'Update question bank via TIMSS admin', content: xlsxBase64, sha: sha || undefined };
-            const putResp = await fetch(getUrl, {
+        fetch('https://api.github.com/repos/' + gh.repo + '/contents/' + gh.path, {
+            headers: { Authorization: 'Bearer ' + gh.token, Accept: 'application/vnd.github.v3+json' }
+        })
+        .then(resp => resp.ok ? resp.json() : { sha: '' })
+        .then(existing => {
+            const sha = existing.sha || '';
+            return fetch('https://api.github.com/repos/' + gh.repo + '/contents/' + gh.path, {
                 method: 'PUT',
                 headers: { Authorization: 'Bearer ' + gh.token, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                body: JSON.stringify({ message: 'Update question bank via TIMSS admin', content: xlsxBase64, sha: sha || undefined })
             });
-            if (!putResp.ok) {
-                const err = await putResp.json();
-                throw new Error(err.message || 'HTTP ' + putResp.status);
-            }
-            const result = await putResp.json();
-            showGhStatus('✅ 發佈成功！' + result.content.path + '（已更新 ' + qb.length + ' 題）<br>🕐 GitHub Pages 約 1-2 分鐘後自動更新', '#2a9d8f');
-        } catch(e) {
-            showGhStatus('❌ 發佈失敗：' + e.message, '#c44536');
-        }
-    }
-
-    async function syncFromGithub() {
-        const gh = getGithubSettings();
-        if (!gh.token || !gh.repo) { showGhStatus('❌ 請先儲存 GitHub 設定', '#c44536'); return; }
-        showGhStatus('🔄 正在從 GitHub 下載題庫...', '#1e6fd9');
-
-        try {
-            const url = 'https://api.github.com/repos/' + gh.repo + '/contents/' + gh.path;
-            const resp = await fetch(url, {
-                headers: { Authorization: 'Bearer ' + gh.token, Accept: 'application/vnd.github.v3+json' }
-            });
-            if (!resp.ok) throw new Error('找不到檔案 (HTTP ' + resp.status + ')');
-            const data = await resp.json();
-            const base64 = data.content.replace(/\n/g, '');
-            const binary = atob(base64);
-            const bytes = new Uint8Array(binary.length);
-            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-            const wb = XLSX.read(bytes, { type: 'array' });
-            const ws = wb.Sheets[wb.SheetNames[0]];
-            const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
-            if (rows.length < 2) throw new Error('XLSX 中無資料');
-            const qb = parseQuestionsFromRows(rows);
-            if (qb.length === 0) throw new Error('無有效題目');
-            saveQuestionBank(qb);
-            renderQuestionBankTable();
-            showGhStatus('✅ 同步成功！已從 GitHub 下載 ' + qb.length + ' 題', '#2a9d8f');
-        } catch(e) {
-            showGhStatus('❌ 同步失敗：' + e.message, '#c44536');
-        }
+        })
+        .then(resp => {
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            btn.textContent = '✅ 已更新！';
+            setTimeout(() => { btn.textContent = origText; btn.disabled = false; }, 3000);
+            alert('✅ 題庫已發佈！約 1-2 分鐘後網站更新。');
+        })
+        .catch(err => {
+            btn.textContent = '❌ 失敗';
+            setTimeout(() => { btn.textContent = origText; btn.disabled = false; }, 3000);
+            alert('❌ 發佈失敗：' + err.message + '\n請檢查 Token 與倉儲名稱是否正確。');
+        });
     }
 
     function renderQuestionBankTable() {
@@ -1235,7 +1144,6 @@
                     toggleModeSections();
                 }
                 if (this.dataset.tab === 'results') renderResultsView();
-                if (this.dataset.tab === 'github') renderGithubSettings();
             });
         });
 
@@ -1249,6 +1157,7 @@
             this.value = '';
         });
         document.getElementById('syncXLSXBtn').addEventListener('click', syncFromServerXLSX);
+        document.getElementById('publishBtn').addEventListener('click', quickPublish);
         document.getElementById('resetBankBtn').addEventListener('click', function() {
             showResetPwdDialog();
         });
@@ -1300,11 +1209,8 @@
             }
         });
 
-        // github
-        document.getElementById('ghSaveBtn').addEventListener('click', saveGithubForm);
-        document.getElementById('ghPublishBtn').addEventListener('click', publishToGithub);
-        document.getElementById('ghSyncBtn').addEventListener('click', syncFromGithub);
-        document.getElementById('ghTestBtn').addEventListener('click', testGithubConnection);
+        // publish
+        document.getElementById('publishBtn').addEventListener('click', quickPublish);
 
         renderQuestionBankTable();
         renderResultsView();
