@@ -292,6 +292,7 @@
             <button class="admin-tab active" data-tab="bank">📚 題庫管理</button>
             <button class="admin-tab" data-tab="test">📝 出題設定</button>
             <button class="admin-tab" data-tab="results">📊 考試結果</button>
+            <button class="admin-tab" data-tab="gas">☁️ GAS 雲端</button>
         </div>
         <div class="admin-content">
             <!-- 題庫管理 -->
@@ -304,7 +305,7 @@
                     <button id="importXLSXBtn2" class="btn-success">📥 匯入 XLSX</button>
                     <button id="syncXLSXBtn" class="btn-success">🔄 從伺服器同步</button>
                     <input type="file" id="xlsxQFileInput" accept=".xlsx" style="display:none;">
-                    <button id="publishBtn" class="btn-success" style="background:#8e44ad;">📤 更新網站題庫</button>
+                    <button id="publishBtn" class="btn-success" style="background:#8e44ad;display:none;">📤 更新網站題庫</button>
                     <button id="resetBankBtn" class="btn-danger">重置題庫</button>
                 </div>
                 <table class="qb-table"><thead><tr><th>ID</th><th>題型</th><th>題目預覽</th><th>正確答案</th><th>操作</th></tr></thead><tbody id="bankTableBody"></tbody></table>
@@ -349,6 +350,52 @@
                     <div class="stat-card"><div class="num" id="resultCount">0</div><div class="label">已匯入學生</div></div>
                 </div>
                 <div id="resultsTableContainer"></div>
+            </div>
+            <!-- GAS 雲端 -->
+            <div id="tabGas" class="admin-tab-content">
+                <div class="config-section">
+                    <h4>🔗 GAS API 設定</h4>
+                    <div class="auto-row">
+                        <label style="min-width:120px;">API 網址：</label>
+                        <input type="url" id="gasApiUrl" placeholder="https://script.google.com/macros/s/XXXXX/exec" style="flex:1;padding:10px 16px;border:2px solid #b8cadc;border-radius:30px;font-size:1rem;">
+                    </div>
+                    <p style="color:#5b7a94;font-size:0.85rem;margin:4px 0 12px 120px;">⚠️ 必須以 <code style="background:#eef3f8;padding:2px 8px;border-radius:4px;">/exec</code> 結尾，不要複製 <code style="background:#eef3f8;padding:2px 8px;border-radius:4px;">/edit</code> 網址</p>
+                    <div class="auto-row">
+                        <label style="min-width:120px;">API 密碼：</label>
+                        <input type="password" id="gasApiPwd" placeholder="admin" style="width:200px;padding:10px 16px;border:2px solid #b8cadc;border-radius:30px;font-size:1rem;">
+                    </div>
+                    <div class="auto-row" style="margin-top:12px;">
+                        <button id="gasTestBtn" class="btn-success" style="padding:10px 24px;border:none;border-radius:30px;cursor:pointer;font-weight:600;color:white;font-size:1rem;">🔍 測試連線</button>
+                        <button id="gasSaveSettingsBtn" class="btn-success" style="padding:10px 24px;border:none;border-radius:30px;cursor:pointer;font-weight:600;color:white;font-size:1rem;">💾 儲存設定</button>
+                    </div>
+                </div>
+                    <div class="auto-row">
+                        <label style="min-width:120px;">API 密碼：</label>
+                        <input type="password" id="gasApiPwd" placeholder="admin" style="width:200px;padding:10px 16px;border:2px solid #b8cadc;border-radius:30px;font-size:1rem;">
+                    </div>
+                    <div class="auto-row" style="margin-top:12px;">
+                        <button id="gasTestBtn" class="btn-success" style="padding:10px 24px;border:none;border-radius:30px;cursor:pointer;font-weight:600;color:white;font-size:1rem;">🔍 測試連線</button>
+                        <button id="gasSaveSettingsBtn" class="btn-success" style="padding:10px 24px;border:none;border-radius:30px;cursor:pointer;font-weight:600;color:white;font-size:1rem;">💾 儲存設定</button>
+                    </div>
+                </div>
+                <div class="config-section">
+                    <h4> 上傳題庫到 GAS 雲端</h4>
+                    <p style="color:#5b7a94;margin-bottom:12px;font-size:0.95rem;">將當前題庫打包成 XLSX 並上傳到 Google Drive，作為 GitHub Pages 的備份來源</p>
+                    <div class="auto-row">
+                        <button id="gasUploadBtn" class="btn-success" style="padding:12px 28px;border:none;border-radius:30px;cursor:pointer;font-weight:600;color:white;font-size:1rem;">📤 上傳題庫到雲端</button>
+                    </div>
+                </div>
+                <div class="config-section">
+                    <h4>📥 從 GAS 雲端同步題庫</h4>
+                    <p style="color:#5b7a94;margin-bottom:12px;font-size:0.95rem;">從 Google Drive 下載最新 XLSX 並覆蓋本地題庫（替代「從伺服器同步」）</p>
+                    <div class="auto-row">
+                        <button id="gasSyncBtn" class="btn-success" style="padding:12px 28px;border:none;border-radius:30px;cursor:pointer;font-weight:600;color:white;font-size:1rem;background:#27ae60;">🔄 從雲端同步題庫</button>
+                    </div>
+                </div>
+                <div class="config-section">
+                    <h4>📋 操作紀錄</h4>
+                    <div id="gasLog" style="background:#1a2332;color:#a8d8a8;border-radius:16px;padding:16px;font-family:'Courier New',monospace;font-size:0.9rem;max-height:200px;overflow-y:auto;white-space:pre-wrap;min-height:60px;">等待操作...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -428,7 +475,7 @@
     const LS_SP = 'timss_studentPassword';
     const LS_QID = 'timss_nextQid';
     const LS_GH = 'timss_github';
-    const DEFAULT_ADMIN_PWD = 'admin123';
+    const DEFAULT_ADMIN_PWD = 'admin';
     const DEFAULT_STUDENT_PWD = '2129';
 
     const TYPE_LABELS = {
@@ -644,6 +691,7 @@
                 saveQuestionBank(qb);
                 renderQuestionBankTable();
                 alert(`✅ 成功匯入 ${qb.length} 題`);
+                setTimeout(() => quickPublish(), 1000);
             } catch(err) {
                 alert('XLSX 解析失敗：' + err.message);
             }
@@ -679,6 +727,160 @@
                 status.style.color = '#c44536';
                 setTimeout(() => { if (status.textContent.includes(err.message)) status.textContent = origStatus; }, 4000);
             });
+    }
+
+    // ═══════════════════════════════════════════════════
+    //  3c. GAS Cloud Sync
+    // ═══════════════════════════════════════════════════
+
+    const LS_GAS = 'timss_gasSettings';
+    function getGasSettings() { return lsGet(LS_GAS, { url: '', password: 'admin' }); }
+    function saveGasSettings(s) { lsSet(LS_GAS, s); }
+
+    function gasLog(msg, type) {
+        const log = document.getElementById('gasLog');
+        if (!log) return;
+        const colors = { info: '#a8d8a8', success: '#4ade80', error: '#f87171', warn: '#fbbf24' };
+        const color = colors[type] || colors.info;
+        const time = new Date().toLocaleTimeString('zh-TW');
+        log.innerHTML += `<div style="color:${color};margin-bottom:4px;">[${time}] ${msg}</div>`;
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function gasCall(action, method, body) {
+        const settings = getGasSettings();
+        if (!settings.url) {
+            return Promise.reject(new Error('請先設定 GAS API 網址'));
+        }
+        
+        let url = settings.url.trim();
+        // 自動偵測常見網址錯誤
+        if (url.includes('/edit') || !url.includes('/exec')) {
+            return Promise.reject(new Error('網址格式錯誤！請使用「部署 > 網頁應用程式」產生的網址 (結尾為 /exec)，不要複製瀏覽器上的編輯器網址。'));
+        }
+        
+        const pwd = body ? body.password : settings.password;
+        const fullUrl = url + '?action=' + action + '&password=' + encodeURIComponent(pwd);
+
+        const opts = { method: method };
+        if (method === 'POST') {
+            opts.headers = { 'Content-Type': 'text/plain;charset=utf-8' };
+            opts.body = JSON.stringify(body);
+        }
+
+        return fetch(fullUrl, opts)
+            .then(r => {
+                if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                const ct = r.headers.get('content-type');
+                if (ct && ct.includes('application/json')) return r.json();
+                return r.text().then(txt => {
+                    if (txt.includes('<html') || txt.includes('<!DOCTYPE')) {
+                        throw new Error('GAS 返回 HTML 頁面。請確認：1. 部署存取權設為「任何人」 2. 網址正確');
+                    }
+                    return JSON.parse(txt);
+                });
+            });
+    }
+
+    function gasTestConnection() {
+        gasLog('🔍 正在測試連線...', 'info');
+        gasCall('info', 'GET', null)
+            .then(res => {
+                if (res.success) {
+                    gasLog(`✅ 連線成功！資料夾: ${res.folderName || 'N/A'}`, 'success');
+                    if (res.sheetUrl) gasLog(`📊 Sheets: ${res.sheetUrl}`, 'info');
+                    if (res.hasLatestFile) gasLog(`📁 已有題庫檔案 (最後更新: ${res.lastUpdated || 'N/A'})`, 'info');
+                    else gasLog('⚠️ 雲端尚無題庫檔案', 'warn');
+                } else {
+                    gasLog(`❌ 回應錯誤: ${res.error}`, 'error');
+                }
+            })
+            .catch(err => gasLog(`❌ 連線失敗: ${err.message}`, 'error'));
+    }
+
+    function gasUploadXLSX() {
+        gasLog('📤 正在打包題庫...', 'info');
+        try {
+            const qb = getQuestionBank();
+            if (qb.length === 0) {
+                gasLog('⚠️ 題庫為空，無法上傳', 'warn');
+                return;
+            }
+            const header = ['ID', '題型', '標題', '題目內容', '選項A', '選項B', '選項C', '選項D', '正確答案', '多組答案(|分隔)', '圖片網址'];
+            const data = [header];
+            qb.forEach(q => {
+                const content = stripHtml(q.content).replace(/\s+/g, ' ').trim();
+                const row = [q.id, q.type, q.title, content, '', '', '', '', '', '', q.image || ''];
+                if (q.options) q.options.forEach((o, i) => { if (i < 4) row[4 + i] = o.text; });
+                const ans = q.correctAnswer ? Object.values(q.correctAnswer).filter(v => v).join(', ') : '';
+                row[8] = ans;
+                if (q.multiAnswers) {
+                    const vals = Array.isArray(q.multiAnswers) ? q.multiAnswers : Object.values(q.multiAnswers).flat();
+                    row[9] = vals.filter(Boolean).join('|');
+                }
+                data.push(row);
+            });
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            ws['!cols'] = [{wch:5},{wch:16},{wch:24},{wch:50},{wch:16},{wch:16},{wch:16},{wch:16},{wch:16},{wch:24},{wch:40}];
+            XLSX.utils.book_append_sheet(wb, ws, '題庫');
+            const xlsxBase64 = XLSX.write(wb, { type: 'base64' });
+
+            gasLog(`📤 正在上傳 ${qb.length} 題到雲端...`, 'info');
+            gasCall('upload-base64', 'POST', { action: 'upload-base64', base64: xlsxBase64 })
+                .then(res => {
+                    if (res.success) {
+                        gasLog(`✅ 上傳成功！檔案: ${res.fileName || 'N/A'}`, 'success');
+                    } else {
+                        gasLog(`❌ 上傳失敗: ${res.error}`, 'error');
+                    }
+                })
+                .catch(err => gasLog(`❌ 上傳錯誤: ${err.message}`, 'error'));
+        } catch (err) {
+            gasLog(`❌ 打包失敗: ${err.message}`, 'error');
+        }
+    }
+
+    function gasSyncFromCloud() {
+        gasLog(' 正在從雲端同步題庫...', 'info');
+        gasCall('download', 'GET', null)
+            .then(res => {
+                if (res.success && res.downloadUrl) {
+                    gasLog('📥 正在取得 XLSX 檔案...', 'info');
+                    return fetch(res.downloadUrl).then(r => r.arrayBuffer());
+                } else {
+                    throw new Error(res.error || '下載失敗');
+                }
+            })
+            .then(buf => {
+                const wb = XLSX.read(new Uint8Array(buf), { type: 'array' });
+                const ws = wb.Sheets[wb.SheetNames[0]];
+                const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+                if (rows.length < 2) throw new Error('XLSX 中無題目資料');
+                const qb = parseQuestionsFromRows(rows);
+                if (qb.length === 0) throw new Error('匯入後無有效題目');
+                saveQuestionBank(qb);
+                renderQuestionBankTable();
+                gasLog(`✅ 同步成功！已載入 ${qb.length} 題到本地題庫`, 'success');
+            })
+            .catch(err => gasLog(` 同步失敗: ${err.message}`, 'error'));
+    }
+
+    function gasSaveSettings() {
+        const url = document.getElementById('gasApiUrl').value.trim();
+        const pwd = document.getElementById('gasApiPwd').value.trim();
+        if (!url) {
+            gasLog('⚠️ 請輸入 GAS API 網址', 'warn');
+            return;
+        }
+        saveGasSettings({ url, password: pwd || 'admin' });
+        gasLog('✅ 設定已儲存', 'success');
+    }
+
+    function gasLoadSettings() {
+        const settings = getGasSettings();
+        if (settings.url) document.getElementById('gasApiUrl').value = settings.url;
+        if (settings.password) document.getElementById('gasApiPwd').value = settings.password;
     }
 
     // ═══════════════════════════════════════════════════
@@ -1111,7 +1313,7 @@
     //  5. ADMIN EVENT BINDING
     // ═══════════════════════════════════════════════════
 
-    function initAdmin() {
+function initAdmin() {
         seedIfEmpty();
         document.getElementById('adminPanel').style.display = 'flex';
         document.getElementById('loginPanel').style.display = 'none';
@@ -1144,6 +1346,7 @@
                     toggleModeSections();
                 }
                 if (this.dataset.tab === 'results') renderResultsView();
+                if (this.dataset.tab === 'gas') gasLoadSettings();
             });
         });
 
@@ -1208,6 +1411,13 @@
                 document.getElementById('testApp').style.display = 'none';
             }
         });
+
+        // GAS cloud sync
+        document.getElementById('gasTestBtn').addEventListener('click', gasTestConnection);
+        document.getElementById('gasSaveSettingsBtn').addEventListener('click', gasSaveSettings);
+        document.getElementById('gasUploadBtn').addEventListener('click', gasUploadXLSX);
+        document.getElementById('gasSyncBtn').addEventListener('click', gasSyncFromCloud);
+        gasLoadSettings();
 
         // publish
         document.getElementById('publishBtn').addEventListener('click', quickPublish);
