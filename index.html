@@ -1479,31 +1479,31 @@
                 });
             }
         } else if (q.type === 'fill-blank') {
-            bodyHtml += q.content;
             const temp = document.createElement('div');
             temp.innerHTML = q.content;
-            temp.querySelectorAll('input, textarea').forEach(inp => {
-                const name = inp.getAttribute('name');
-                if (name && stored[name] !== undefined) inp.value = stored[name];
-            });
-            if (temp.querySelector('input, textarea')) {
-                bodyHtml = temp.innerHTML;
+            const existingInputs = temp.querySelectorAll('input, textarea');
+            if (existingInputs.length > 0) {
+                // Strip inputs, add them below
+                bodyHtml = q.content.replace(/<input[^>]*>/gi, '').replace(/<textarea[^>]*>[\s\S]*?<\/textarea>/gi, '');
+                existingInputs.forEach((inp, idx) => {
+                    const name = inp.getAttribute('name') || 'q' + (idx > 0 ? '_' + String.fromCharCode(96 + idx) : '');
+                    const ph = inp.getAttribute('placeholder') || '請填入答案';
+                    bodyHtml += '<br><input type="text" name="' + name + '" placeholder="' + ph + '" style="width:90%;max-width:400px;padding:12px 16px;font-size:1.1rem;border:2px solid #cbd5e1;border-radius:30px;margin-top:8px;">';
+                });
             } else {
-                bodyHtml += '<br><input type="text" name="q" placeholder="請填入答案" style="width:90%;max-width:400px;padding:12px 16px;font-size:1.1rem;border:2px solid #cbd5e1;border-radius:30px;margin-top:10px;">';
+                bodyHtml = q.content;
+                bodyHtml += '<br><input type="text" name="q" placeholder="請填入答案" style="width:90%;max-width:400px;padding:12px 16px;font-size:1.1rem;border:2px solid #cbd5e1;border-radius:30px;margin-top:8px;">';
             }
         } else if (q.type === 'short-answer') {
-            bodyHtml += q.content;
             const temp = document.createElement('div');
             temp.innerHTML = q.content;
-            temp.querySelectorAll('input, textarea').forEach(inp => {
-                const name = inp.getAttribute('name');
-                if (name && stored[name] !== undefined) inp.value = stored[name];
-            });
-            if (!temp.querySelector('input, textarea')) {
-                bodyHtml += '<textarea name="q" rows="3" placeholder="請輸入你的回答..." style="width:100%;padding:12px 16px;font-size:1.1rem;border:2px solid #cbd5e1;border-radius:20px;margin-top:10px;"></textarea>';
+            const ta = temp.querySelector('textarea');
+            if (ta) {
+                bodyHtml = q.content.replace(/<textarea[^>]*>[\s\S]*?<\/textarea>/gi, '');
             } else {
-                bodyHtml = temp.innerHTML;
+                bodyHtml = q.content;
             }
+            bodyHtml += '<br><textarea name="q" rows="3" placeholder="請輸入你的回答..." style="width:100%;padding:12px 16px;font-size:1.1rem;border:2px solid #cbd5e1;border-radius:20px;margin-top:8px;box-sizing:border-box;"></textarea>';
         }
 
         bodyHtml += `<div class="button-group">
