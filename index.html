@@ -1585,13 +1585,6 @@
             if (hasPlaceholder) {
                 const inlineInput = '<input type="text" name="q" placeholder="輸入答案" style="display:inline-block;width:120px;padding:6px 12px;font-size:1.1rem;border:none;border-bottom:3px solid #1e6fd9;background:transparent;outline:none;text-align:center;margin:0 4px;" class="fill-inline">';
                 bodyHtml = q.content.replace(/_{2,}/g, inlineInput);
-                // Restore stored value
-                if (stored.q !== undefined) {
-                    setTimeout(() => {
-                        const inp = document.querySelector('#questionBody_' + currentIndex + ' .fill-inline');
-                        if (inp) inp.value = stored.q;
-                    }, 0);
-                }
             } else if (temp.querySelector('input, textarea')) {
                 bodyHtml = temp.innerHTML;
             } else {
