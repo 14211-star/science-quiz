@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIMSS 三年級科學 · 模擬測驗（隨機題序／自動批改）</title>
+    <title>三年級科學 · 模擬測驗（隨機題序／自動批改）</title>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', 'Microsoft JhengHei', 微軟正黑體, sans-serif; }
@@ -383,7 +383,7 @@
 <!-- ─── 正式測驗界面 ─── -->
 <div id="testApp" class="app">
     <div class="header">
-        <span>🔬 TIMSS 三年級科學 · 模擬評量（題序隨機）</span>
+        <span>🔬 三年級科學 · 模擬評量（題序隨機）</span>
         <span class="student-badge" id="headerStudent">—</span>
         <span class="timer" id="timerDisplay">36:00</span>
     </div>
@@ -1767,7 +1767,7 @@
         document.getElementById('testConfigStatus').textContent = `當前試卷：${tc.name} (${tc.questionIds.length} 題)`;
     }
 
-    console.log('✅ TIMSS 測驗系統已啟動');
+    console.log('✅ 三年級科學測驗系統已啟動');
     console.log('   📚 題庫題數:', getQuestionBank().length);
     console.log('   📝 當前試卷:', tc ? `${tc.name} (${tc.questionIds.length} 題)` : '未設定');
     console.log('   📤 管理後台: 雙擊標題或 ?mode=admin');
