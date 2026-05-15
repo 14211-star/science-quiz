@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepSeek V4 Pro · 儀表板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { surface: '#0F0F1A', panel: '#1A1A2E' } } }
+    }
+  </script>
+  <style>
+    @media print {
+      @page { margin: 1.2cm; size: A4; }
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: #fff !important; }
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      .card-print { break-inside: avoid; page-break-inside: avoid; border: 1px solid #e5e7eb !important; background: #fff !important; }
+      .text-print { color: #111827 !important; }
+      .bg-print { background: #f9fafb !important; }
+    }
+    .print-only { display: none; }
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-surface dark:text-gray-100 min-h-screen">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+
+    <!-- Header -->
+    <header class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 print-only" style="display:none">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-bold shadow-lg">DS</div>
+        <div>
+          <h1 class="text-xl font-bold">DeepSeek V4 Pro</h1>
+          <p class="text-xs text-gray-500 dark:text-gray-400">系統配置儀表板</p>
+        </div>
+      </div>
+      <button onclick="window.print()" class="no-print px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm rounded-lg shadow transition-colors">🖨 列印</button>
+    </header>
+    <div class="print-only">
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">DeepSeek V4 Pro · 系統配置報告</h1>
+        <p class="text-sm text-gray-500 mt-1" id="printDate"></p>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
+      <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+        <div class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">MCP 伺服器</div>
+        <div class="text-2xl font-bold mt-1 text-indigo-600 dark:text-indigo-400">5</div>
+        <div class="text-xs text-gray-400 mt-0.5">全數啟用</div>
+      </div>
+      <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+        <div class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">SKILL</div>
+        <div class="text-2xl font-bold mt-1 text-purple-600 dark:text-purple-400">6</div>
+        <div class="text-xs text-gray-400 mt-0.5">全域載入</div>
+      </div>
+      <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+        <div class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Python 檔案</div>
+        <div class="text-2xl font-bold mt-1 text-emerald-600 dark:text-emerald-400">3</div>
+        <div class="text-xs text-gray-400 mt-0.5">後端服務</div>
+      </div>
+      <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+        <div class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">模式</div>
+        <div class="text-2xl font-bold mt-1 text-amber-600 dark:text-amber-400">GPT-5.4</div>
+        <div class="text-xs text-gray-400 mt-0.5">全局思維</div>
+      </div>
+    </div>
+
+    <!-- MCP Servers -->
+    <section class="mb-8">
+      <h2 class="text-base font-semibold mb-3 flex items-center gap-2"><span class="w-1 h-4 bg-indigo-500 rounded-full inline-block"></span>MCP 伺服器</h2>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div><h3 class="font-medium text-sm">🔍 web-search</h3><p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">DuckDuckGo 搜尋，免 API Key</p></div>
+            <span class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium">啟用</span>
+          </div>
+          <div class="mt-2 text-xs text-gray-400 font-mono">uvx duckduckgo-mcp-server</div>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div><h3 class="font-medium text-sm">📄 fetch</h3><p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">抓取網頁內容</p></div>
+            <span class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium">啟用</span>
+          </div>
+          <div class="mt-2 text-xs text-gray-400 font-mono">uvx mcp-server-fetch</div>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div><h3 class="font-medium text-sm">📁 filesystem</h3><p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">讀取專案所有檔案</p></div>
+            <span class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium">啟用</span>
+          </div>
+          <div class="mt-2 text-xs text-gray-400 font-mono truncate">npx @modelcontextprotocol/server-filesystem</div>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div><h3 class="font-medium text-sm">🐙 github</h3><p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">PR / Issue / Repo 管理</p></div>
+            <span class="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 font-medium">需 Token</span>
+          </div>
+          <div class="mt-2 text-xs text-gray-400 font-mono truncate">npx @modelcontextprotocol/server-github</div>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm sm:col-span-2">
+          <div class="flex justify-between items-start">
+            <div><h3 class="font-medium text-sm">🌉 deepseek-bridge</h3><p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">自訂 Python MCP — Supabase 查詢 / GAS 串接 / 智慧意圖分析 / 專案結構診斷</p></div>
+            <span class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 font-medium">啟用</span>
+          </div>
+          <div class="mt-2 flex gap-2 text-xs">
+            <span class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">supabase_query</span>
+            <span class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">supabase_select</span>
+            <span class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">gas_trigger</span>
+            <span class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">smart_search</span>
+            <span class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">read_file</span>
+            <span class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">project_analyzer</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="mb-8">
+      <h2 class="text-base font-semibold mb-3 flex items-center gap-2"><span class="w-1 h-4 bg-purple-500 rounded-full inline-block"></span>全域 SKILL</h2>
+      <div class="grid sm:grid-cols-3 gap-3">
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex items-center gap-2"><span class="w-6 h-6 rounded flex items-center justify-center text-xs" style="background:rgba(99,102,241,0.12)">🧠</span><h3 class="font-medium text-sm">global-planner</h3></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">強制全局分析後再回應，提供完整方案而非逐步回覆</p>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex items-center gap-2"><span class="w-6 h-6 rounded flex items-center justify-center text-xs" style="background:rgba(168,85,247,0.12)">⚡</span><h3 class="font-medium text-sm">auto-dispatcher</h3></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">自動解析意圖，精準啟用對應的 MCP 與 SKILL</p>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex items-center gap-2"><span class="w-6 h-6 rounded flex items-center justify-center text-xs" style="background:rgba(52,211,153,0.12)">✨</span><h3 class="font-medium text-sm">code-evolver</h3></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">自動優化程式碼品質、安全性、效能與格式</p>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex items-center gap-2"><span class="w-6 h-6 rounded flex items-center justify-center text-xs" style="background:rgba(6,182,212,0.12)">🔍</span><h3 class="font-medium text-sm">web-search</h3></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">上網搜尋最新資訊</p>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex items-center gap-2"><span class="w-6 h-6 rounded flex items-center justify-center text-xs" style="background:rgba(245,158,11,0.12)">📂</span><h3 class="font-medium text-sm">file-reader</h3></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">遞迴讀取專案所有檔案</p>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex items-center gap-2"><span class="w-6 h-6 rounded flex items-center justify-center text-xs" style="background:rgba(236,72,153,0.12)">🎨</span><h3 class="font-medium text-sm">tailwind-default</h3></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">所有 HTML/CSS/PPT 預設使用 Tailwind CSS</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Auto-Dispatch Table -->
+    <section class="mb-8">
+      <h2 class="text-base font-semibold mb-3 flex items-center gap-2"><span class="w-1 h-4 bg-emerald-500 rounded-full inline-block"></span>意圖自動調度規則</h2>
+      <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+        <table class="w-full text-sm bg-white dark:bg-panel">
+          <thead>
+            <tr class="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
+              <th class="text-left px-4 py-3 font-medium">意圖</th>
+              <th class="text-left px-4 py-3 font-medium">觸發關鍵詞</th>
+              <th class="text-left px-4 py-3 font-medium">啟用 MCP</th>
+              <th class="text-left px-4 py-3 font-medium">啟用 SKILL</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+            <tr><td class="px-4 py-3">🔍 搜尋</td><td class="px-4 py-3 text-xs text-gray-500">search, 查, 找, 最新, news, what is, how to, 2026</td><td class="px-4 py-3"><span class="tag text-xs px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">web-search, fetch</span></td><td class="px-4 py-3"><span class="tag text-xs px-2 py-0.5 rounded bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">web-search</span></td></tr>
+            <tr><td class="px-4 py-3">📁 檔案/程式</td><td class="px-4 py-3 text-xs text-gray-500">file, read, 讀取, 程式, code, 執行, debug, 分析</td><td class="px-4 py-3"><span class="tag text-xs px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">filesystem</span></td><td class="px-4 py-3"><span class="tag text-xs px-2 py-0.5 rounded bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">file-reader, code-evolver</span></td></tr>
+            <tr><td class="px-4 py-3">🗄️ 資料庫</td><td class="px-4 py-3 text-xs text-gray-500">save, database, 資料庫, supabase, query, 查詢, 存</td><td class="px-4 py-3"><span class="tag text-xs px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">deepseek-bridge (Supabase)</span></td><td class="px-4 py-3 text-xs text-gray-400">—</td></tr>
+            <tr><td class="px-4 py-3">☁️ 雲端/GAS</td><td class="px-4 py-3 text-xs text-gray-500">webhook, gas, deploy, trigger, sheet, 通知, 發送</td><td class="px-4 py-3"><span class="tag text-xs px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">deepseek-bridge (GAS)</span></td><td class="px-4 py-3 text-xs text-gray-400">—</td></tr>
+            <tr><td class="px-4 py-3">🎨 設計/UI</td><td class="px-4 py-3 text-xs text-gray-500">html, css, tailwind, design, ppt, 佈局, 元件, 按鈕</td><td class="px-4 py-3 text-xs text-gray-400">—</td><td class="px-4 py-3"><span class="tag text-xs px-2 py-0.5 rounded bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">tailwind-default</span></td></tr>
+            <tr><td class="px-4 py-3">🔧 GitHub</td><td class="px-4 py-3 text-xs text-gray-500">github, git, pr, issue, commit, push, branch, ci/cd</td><td class="px-4 py-3"><span class="tag text-xs px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">github</span></td><td class="px-4 py-3 text-xs text-gray-400">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Config Files -->
+    <section class="mb-8">
+      <h2 class="text-base font-semibold mb-3 flex items-center gap-2"><span class="w-1 h-4 bg-amber-500 rounded-full inline-block"></span>配置檔案</h2>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex justify-between items-center"><h3 class="font-medium text-sm">~/.config/opencode/opencode.json</h3><span class="text-xs text-gray-400">全域</span></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">5 個 MCP、instructions 指向 AGENTS.md</p>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex justify-between items-center"><h3 class="font-medium text-sm">~/.config/opencode/AGENTS.md</h3><span class="text-xs text-gray-400">全域</span></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">GPT-5.4 全局思維規則，含自動調度決策樹</p>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex justify-between items-center"><h3 class="font-medium text-sm">opencode.json</h3><span class="text-xs text-gray-400">專案</span></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">5 個 MCP（含 github），引用 AGENTS.md</p>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <div class="flex justify-between items-center"><h3 class="font-medium text-sm">AGENTS.md</h3><span class="text-xs text-gray-400">專案</span></div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Tailwind 規則 + MCP 說明 + 自動調度對照表</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Python Backend -->
+    <section class="mb-8">
+      <h2 class="text-base font-semibold mb-3 flex items-center gap-2"><span class="w-1 h-4 bg-rose-500 rounded-full inline-block"></span>Python 後端服務</h2>
+      <div class="grid sm:grid-cols-3 gap-3">
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-medium text-sm">🌉 deepseek_bridge.py</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">FastMCP 伺服器，12 個工具</p>
+          <div class="mt-2 text-xs text-gray-400 font-mono">python MCP/deepseek_bridge.py</div>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-medium text-sm">🖥 server.py</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Web UI 後端，Rate Limit 保護</p>
+          <div class="mt-2 text-xs text-gray-400 font-mono">python MCP/webui/server.py</div>
+        </div>
+        <div class="card-print rounded-xl bg-white dark:bg-panel border border-gray-200 dark:border-gray-800 p-4 shadow-sm">
+          <h3 class="font-medium text-sm">📄 Code.gs</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">GAS Webhook，API Key 認證</p>
+          <div class="mt-2 text-xs text-gray-400 font-mono">clasp deploy</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="text-center text-xs text-gray-400 dark:text-gray-600 border-t border-gray-200 dark:border-gray-800 pt-6 mt-8 no-print">
+      DeepSeek V4 Pro · 使用 Tailwind CSS 建置 · <span id="footerDate"></span>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('printDate').textContent = '產生日期：' + new Date().toLocaleString('zh-TW');
+    document.getElementById('footerDate').textContent = new Date().toLocaleString('zh-TW');
+    // 列印後隱藏 header
+    window.onbeforeprint = () => {
+      document.querySelector('header').style.display = 'none';
+      document.querySelector('.print-only').style.display = 'block';
+    };
+    window.onafterprint = () => {
+      document.querySelector('header').style.display = 'flex';
+      document.querySelector('.print-only').style.display = 'none';
+    };
+  </script>
+</body>
+</html>

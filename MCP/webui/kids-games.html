@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>快樂幼兒園遊戲</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:system-ui,sans-serif}
+    .snap{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh}
+    .snap>section{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(.6rem,2vh,1.5rem) clamp(.8rem,3vw,2rem)}
+    .card{border-radius:clamp(10px,1.2vw,14px);padding:clamp(.6em,1.2vw,.9em);border:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:100%}
+    .badge{display:inline-flex;padding:.15em .6em;border-radius:999px;font-size:clamp(.5rem,1.1vw,.65rem);font-weight:600;white-space:nowrap}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.5rem,1.2vw,.8rem);width:100%}
+    .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(.5rem,1.2vw,.8rem);width:100%}
+    .ico{font-size:clamp(1.8rem,4.5vw,3rem);line-height:1}
+    .h1{font-size:clamp(1.4rem,4vw,2.6rem);font-weight:800;margin:0}
+    .h2{font-size:clamp(.9rem,2.2vw,1.3rem);font-weight:700;margin:0}
+    .h3{font-size:clamp(.7rem,1.6vw,.95rem);font-weight:600;margin:0}
+    .p{font-size:clamp(.55rem,1.3vw,.75rem);color:#64748B;margin:.15em 0 0}
+    .nav{position:fixed;bottom:clamp(.5rem,1.5vh,1rem);left:50%;transform:translateX(-50%);display:flex;gap:clamp(.4rem,.8vw,.6rem);z-index:50}
+    .nav a{width:clamp(8px,1vw,12px);height:clamp(8px,1vw,12px);border-radius:50%;transition:background .3s}
+  </style>
+</head>
+<body>
+
+<div class="snap">
+  <!-- ════════ Slide 1: Title ════════ -->
+  <section style="background:linear-gradient(135deg,#fce7f3,#fbcfe8,#fdf2f8)">
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:min(92vw,800px);flex:1">
+      <span class="ico" style="font-size:clamp(3rem,10vw,6rem);margin-bottom:clamp(.3rem,1vh,.6rem)">🎈</span>
+      <h1 class="h1" style="background:linear-gradient(135deg,#EC4899,#F59E0B,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent">快樂幼兒園遊戲</h1>
+      <p class="h2" style="color:#64748B;margin-top:clamp(.15rem,.5vh,.3rem)">一起玩 · 一起學 · 一起長大</p>
+      <div style="display:flex;flex-wrap:wrap;gap:clamp(.3rem,.6vw,.5rem);justify-content:center;margin-top:clamp(.5rem,1.5vh,1rem)">
+        <span class="badge" style="background:rgba(236,72,153,.12);color:#BE185D;border:1px solid rgba(236,72,153,.2)">🧩 益智遊戲</span>
+        <span class="badge" style="background:rgba(245,158,11,.12);color:#B45309;border:1px solid rgba(245,158,11,.2)">⚽ 體能遊戲</span>
+        <span class="badge" style="background:rgba(16,185,129,.12);color:#047857;border:1px solid rgba(16,185,129,.2)">🎨 創意遊戲</span>
+      </div>
+      <div style="margin-top:clamp(.6rem,2vh,1.2rem);color:#94A3B8;font-size:clamp(.45rem,1vw,.6rem)">⬇ 往下滑，看看有哪些遊戲</div>
+    </div>
+  </section>
+
+  <!-- ════════ Slide 2: Game Types ════════ -->
+  <section style="background:linear-gradient(135deg,#fef3c7,#fde68a)">
+    <div style="width:100%;max-width:min(92vw,880px);flex:1;display:flex;flex-direction:column;justify-content:center">
+      <h1 class="h1" style="text-align:center;color:#92400E;margin-bottom:clamp(.3rem,1vh,.6rem)">🎮 遊戲好好玩</h1>
+      <div class="grid3" style="flex:1;align-content:center">
+        <div class="card" style="background:rgba(255,255,255,.7);border-color:rgba(236,72,153,.2)">
+          <span class="ico">🧩</span>
+          <h2 class="h2" style="color:#BE185D;margin-top:clamp(.15rem,.3vh,.3rem)">益智遊戲</h2>
+          <p class="p">拼圖、配對、迷宮<br>訓練觀察力和邏輯</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,.7);border-color:rgba(245,158,11,.2)">
+          <span class="ico">⚽</span>
+          <h2 class="h2" style="color:#B45309;margin-top:clamp(.15rem,.3vh,.3rem)">體能遊戲</h2>
+          <p class="p">跑步、跳繩、丟球<br>鍛鍊大肌肉和協調</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,.7);border-color:rgba(16,185,129,.2)">
+          <span class="ico">🎨</span>
+          <h2 class="h2" style="color:#047857;margin-top:clamp(.15rem,.3vh,.3rem)">創意遊戲</h2>
+          <p class="p">畫畫、捏陶、扮家家酒<br>發揮想像力與表達力</p>
+        </div>
+      </div>
+      <p class="p" style="text-align:center;margin-top:clamp(.3rem,1vh,.6rem);color:#92400E">每天輪流玩不同種類，全面发展</p>
+    </div>
+  </section>
+
+  <!-- ════════ Slide 3: Benefits ════════ -->
+  <section style="background:linear-gradient(135deg,#d1fae5,#a7f3d0)">
+    <div style="width:100%;max-width:min(92vw,800px);flex:1;display:flex;flex-direction:column;justify-content:center">
+      <h1 class="h1" style="text-align:center;color:#047857;margin-bottom:clamp(.3rem,1vh,.6rem)">🌟 遊戲的好處</h1>
+      <div class="grid2" style="flex:1;align-content:center">
+        <div class="card" style="background:rgba(255,255,255,.7);border-color:rgba(37,99,235,.15)">
+          <span class="ico">💪</span>
+          <h2 class="h2" style="color:#1D4ED8;margin-top:clamp(.1rem,.3vh,.25rem)">身體更健康</h2>
+          <p class="p">跑跳運動讓肌肉骨骼發展，增強體力不生病</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,.7);border-color:rgba(236,72,153,.15)">
+          <span class="ico">🧠</span>
+          <h2 class="h2" style="color:#BE185D;margin-top:clamp(.1rem,.3vh,.25rem)">大腦更聰明</h2>
+          <p class="p">拼圖和迷宮訓練專注力、記憶力和解決問題的能力</p>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,.7);border-color:rgba(245,158,11,.15)">
+          <span class="ico">😊</span>
+          <h2 class="h2" style="color:#B45309;margin-top:clamp(.1rem,.3vh,.25rem)">心情更快樂</h2>
+          <p class="p">遊戲釋放壓力，大笑產生幸福荷爾蒙</p>
+        </div>
+        <div class="card" style="background:rgba(16,185,129,.7);border-color:rgba(16,185,129,.2)">
+          <span class="ico">🤝</span>
+          <h2 class="h2" style="color:#064E3B;margin-top:clamp(.1rem,.3vh,.25rem)">朋友更多</h2>
+          <p class="p" style="color:#064E3B">團體遊戲學會分享、輪流、合作和溝通</p>
+        </div>
+      </div>
+      <p class="p" style="text-align:center;margin-top:clamp(.3rem,1vh,.6rem);color:#047857">每天開心玩，健康快樂長大！🎉</p>
+    </div>
+  </section>
+</div>
+
+<!-- nav dots -->
+<div class="nav">
+  <a href="#" onclick="document.querySelector('.snap').scrollTo({top:0,behavior:'smooth'});return false" style="background:#EC4899"></a>
+  <a href="#" onclick="document.querySelector('.snap').scrollTo({top:window.innerHeight,behavior:'smooth'});return false" style="background:#F59E0B"></a>
+  <a href="#" onclick="document.querySelector('.snap').scrollTo({top:window.innerHeight*2,behavior:'smooth'});return false" style="background:#10B981"></a>
+</div>
+
+</body>
+</html>
