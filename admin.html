@@ -155,8 +155,8 @@
                 <li>準備好 <code>questions.xlsx</code> 檔案（可從後台「匯出 XLSX」取得範本）</li>
                 <li>點擊上方上傳區域選擇檔案</li>
                 <li>確認題目數量無誤後，點擊「上傳到 GitHub」</li>
-                <li>系統會自動觸發 GitHub Actions，約 1-2 分鐘後題庫更新生效</li>
-                <li>學生端會自動載入最新題庫</li>
+                <li>系統會自動透過 Cloudflare Worker 上傳，並觸發 GitHub Actions</li>
+                <li>約 1-2 分鐘後題庫更新生效，學生端自動載入最新題庫</li>
             </ol>
             <p style="margin-top:12px;color:#8a6d00;font-size:0.9rem;">
                 ⚠️ 注意：上傳後請等待 GitHub Actions 完成處理，期間學生可能看到舊題庫。
@@ -177,7 +177,7 @@
 
 <script>
 const ADMIN_PASSWORD = 'admin123';
-const GH_REPO = '14211-star/science-quiz';
+const WORKER_URL = 'https://sparkling-night-1177.ab117395.workers.dev/upload';
 let selectedFile = null;
 let questionCount = 0;
 
@@ -262,25 +262,60 @@ function log(msg, type = 'info') {
     logArea.scrollTop = logArea.scrollHeight;
 }
 
-async function getGitHubToken() {
-    // Try to get token from GitHub Secrets via a secure method
-    // For now, we'll prompt the user to enter their token
-    // In production, this should be handled by a backend or GitHub App
-    
-    const stored = sessionStorage.getItem('ghToken');
-    if (stored) return stored;
-    
-    const token = prompt('請輸入 GitHub Personal Access Token：\n\n' +
-        '1. 前往 https://github.com/settings/tokens\n' +
-        '2. 點擊 "Generate new token (classic)"\n' +
-        '3. 勾選 "repo" 權限\n' +
-        '4. 複製 token 並貼上至此\n\n' +
-        'Token 僅會儲存在此瀏覽器 session 中，關閉頁面後會清除。');
-    
-    if (token) {
-        sessionStorage.setItem('ghToken', token);
-        return token;
+async function uploadToGitHub() {
+    if (!selectedFile) {
+        alert('請先選擇檔案');
+        return;
     }
+    
+    const uploadBtn = document.getElementById('uploadBtn');
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = '⏳ 上傳中...';
+    
+    log('開始上傳 ' + selectedFile.name + '...');
+    
+    try {
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const base64 = btoa(String.fromCharCode(...new Uint8Array(e.target.result)));
+            
+            log('發送到 Cloudflare Worker...');
+            
+            const resp = await fetch(WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    password: ADMIN_PASSWORD,
+                    xlsx: base64
+                })
+            });
+            
+            const result = await resp.json();
+            
+            if (!resp.ok) {
+                throw new Error(result.error || `HTTP ${resp.status}`);
+            }
+            
+            log('✅ 題庫已成功上傳到 GitHub！', 'success');
+            log('⏳ GitHub Actions 將自動處理，約 1-2 分鐘後生效', 'info');
+            
+            uploadBtn.textContent = '✅ 上傳成功';
+            setTimeout(() => {
+                uploadBtn.textContent = '📤 上傳到 GitHub';
+                uploadBtn.disabled = false;
+            }, 3000);
+        };
+        reader.readAsArrayBuffer(selectedFile);
+        
+    } catch(err) {
+        log('❌ 上傳失敗：' + err.message, 'error');
+        uploadBtn.textContent = '❌ 上傳失敗';
+        uploadBtn.disabled = false;
+        setTimeout(() => {
+            uploadBtn.textContent = '📤 上傳到 GitHub';
+        }, 3000);
+    }
+}
     return null;
 }
 

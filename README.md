@@ -40,7 +40,7 @@
 - **出題設定**：自動出題（依題型設定數量隨機抽題）或手動選題
 - **匯出 / 匯入 XLSX**：題庫可存成 Excel 檔編輯後再匯入
 - **上傳到 GitHub**：匯入後可上傳到 GitHub，觸發 Actions 自動同步到網站
-- **安全改進**：GitHub Token 不再暴露在前端，改由管理員手動輸入
+- **Cloudflare Worker**：題庫上傳透過 Cloudflare Worker 代理，無需輸入 GitHub Token
 
 ### 管理後台（考試結果）
 
@@ -79,8 +79,9 @@
 
 1. 在管理後台（`/admin.html`）匯入新的 `questions.xlsx`
 2. 點擊「上傳到 GitHub」按鈕
-3. 系統會自動觸發 GitHub Actions，約 1-2 分鐘後題庫更新生效
-4. 學生端會自動載入最新題庫
+3. 系統會自動透過 Cloudflare Worker 上傳到 GitHub
+4. GitHub Actions 自動將 XLSX 轉換為 JSON，約 1-2 分鐘後題庫更新生效
+5. 學生端會自動載入最新題庫
 
 ### 本機離線測試
 
@@ -94,11 +95,11 @@ http://localhost:8080
 
 ---
 
-##  技術架構
+## 🛠 技術架構
 
 - **純前端**：單一 HTML 檔案，無需後端伺服器
 - **資料儲存**：題庫存在瀏覽器 `localStorage`
-- **題庫同步**：GitHub Actions 自動將 `questions.xlsx` 轉換為 `questions.json`
+- **題庫同步**：Cloudflare Worker + GitHub Actions 自動將 `questions.xlsx` 轉換為 `questions.json`
 - **Excel 處理**：使用 SheetJS 庫（前端）和 openpyxl（Actions）
 - **樣式**：純 CSS，無框架依賴
 
@@ -106,40 +107,50 @@ http://localhost:8080
 
 ```
 science-quiz/
-├── index.html              ← 學生測驗頁面
-├── admin.html              ← 管理後台
+├── index.html              ← 學生測驗頁面（含內嵌管理後台）
+├── admin.html              ← 獨立管理後台（XLSX 上傳同步）
 ├── questions.xlsx          ← 題庫來源檔案
 ├── questions.json          ← Actions 自動生成（學生端載入）
-── README.md               ← 說明文件
+├── README.md               ← 說明文件
 ├── .github/
 │   └── workflows/
-│       └── sync.yml        ← GitHub Actions 工作流程
+│       ├── sync.yml        ← XLSX → JSON 轉換工作流
+│       └── deploy.yml      ← 部署到 GitHub Pages 工作流
 └── scripts/
     ├── parse_xlsx.py       ← XLSX 解析腳本（Actions 使用）
-    ── generate_initial_xlsx.py  ← 生成初始題庫（一次性）
+    └── generate_initial_xlsx.py  ← 生成初始題庫（一次性）
 ```
 
+### GitHub Actions 工作流
+
+| 工作流 | 觸發條件 | 功能 |
+|--------|----------|------|
+| **sync.yml** | `questions.xlsx` 變更 | 解析 XLSX → 生成 `questions.json` |
+| **deploy.yml** | 程式碼推送 / sync 完成 | 部署所有檔案到 GitHub Pages |
+
 ---
 
-##  注意事項
+## ⚠️ 注意事項
 
 - 學生密碼和管理員密碼可透過瀏覽器開發工具修改，建議定期更換
-- GitHub Token 不再硬編碼在前端，改由管理員在後台手動輸入
+- GitHub Token 已移至 Cloudflare Worker Secrets，前端不再暴露
 - 清除瀏覽器資料會清除題庫和設定，請定期匯出備份
 - GitHub Pages 更新約需 1-2 分鐘（Actions 執行時間）
-- 管理員需要 GitHub Personal Access Token 才能上傳題庫（權限：`repo`）
+- 管理員密碼為 `admin123`，任何電腦只需輸入此密碼即可上傳題庫
 
 ---
 
-## 🔧 管理員 Token 設定
+## ☁️ Cloudflare Worker 設定
 
-首次使用管理後台時，需要輸入 GitHub Personal Access Token：
+題庫上傳功能依賴 Cloudflare Worker 代理 GitHub API 呼叫：
 
-1. 前往 https://github.com/settings/tokens
-2. 點擊 "Generate new token (classic)"
-3. 勾選 `repo` 權限
-4. 複製 token 並貼上至管理後台
-5. Token 僅儲存在瀏覽器 session 中，關閉頁面後會清除
+| 項目 | 說明 |
+|------|------|
+| **Worker URL** | `https://sparkling-night-1177.ab117395.workers.dev/upload` |
+| **Secrets** | `GITHUB_TOKEN`, `GITHUB_REPO`, `ADMIN_PASSWORD` |
+| **免費額度** | 10 萬次請求/天，絕對夠用 |
+
+老師只需記住管理員密碼 `admin123`，即可在任何電腦上傳題庫，無需設定 GitHub Token。
 
 ---
 
