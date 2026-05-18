@@ -1,0 +1,690 @@
+[
+  {
+    "id": 1,
+    "type": "image-choice",
+    "title": "辨認動物",
+    "content": "<p><strong>圖中是甚麼種類的動物？</strong></p><p>請選擇正確的分類：</p>",
+    "correctAnswer": {
+      "q": "B"
+    },
+    "multiAnswers": null,
+    "image": "https://i.pinimg.com/736x/08/30/45/0830457efcb9967453099414443272a8.jpg",
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "鳥類",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "哺乳類",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "魚類",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "昆蟲",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "type": "text-choice",
+    "title": "光合作用",
+    "content": "<p>植物的哪個部分通常進行光合作用？</p>",
+    "correctAnswer": {
+      "q": "C"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "根",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "莖",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "葉",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "花",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "type": "short-answer",
+    "title": "水的蒸發",
+    "content": "<p>一杯水放在桌上，三天後水位變低了。水去哪裡了？請寫出你的想法。</p>",
+    "correctAnswer": {
+      "q": ""
+    },
+    "multiAnswers": null,
+    "image": null
+  },
+  {
+    "id": 4,
+    "type": "text-choice",
+    "title": "重力",
+    "content": "<p>下面哪一種力會把物體往地面拉？</p>",
+    "correctAnswer": {
+      "q": "C"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "磁力",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "摩擦力",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "重力",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "彈力",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "type": "text-choice",
+    "title": "魚類呼吸",
+    "content": "<p>魚類用什麼呼吸？</p>",
+    "correctAnswer": {
+      "q": "C"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "肺",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "皮膚",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "氣管",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "type": "text-choice",
+    "title": "自然資源",
+    "content": "<p>下列哪一個是「自然資源」？</p>",
+    "correctAnswer": {
+      "q": "C"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "塑膠",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "玻璃",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "陽光",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "鋼鐵",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "type": "text-choice",
+    "title": "太陽軌跡",
+    "content": "<p>一天中，太陽在天空中的位置怎樣變化？</p>",
+    "correctAnswer": {
+      "q": "A"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "從東邊升起，西邊落下",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "從西邊升起，東邊落下",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "一直停在頭頂",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "從北邊移到南邊",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "type": "fill-blank",
+    "title": "水的三態",
+    "content": "<p>水的三態分為固體、______ 和氣體。</p>",
+    "correctAnswer": {
+      "q": "液態"
+    },
+    "multiAnswers": {
+      "q": [
+        "液態",
+        "液體"
+      ]
+    },
+    "image": null
+  },
+  {
+    "id": 9,
+    "type": "text-choice",
+    "title": "昆蟲",
+    "content": "<p>下列哪一種動物是「昆蟲」？</p>",
+    "correctAnswer": {
+      "q": "B"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "蜘蛛",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "蜜蜂",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "蜈蚣",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "牛",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "type": "text-choice",
+    "title": "雨衣材料",
+    "content": "<p>哪一種材料最適合用來做雨衣？</p>",
+    "correctAnswer": {
+      "q": "B"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "棉布",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "塑膠",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "紙",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "木頭",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "type": "short-answer",
+    "title": "月亮發光",
+    "content": "<p>月亮會發光嗎？請簡單說明。</p>",
+    "correctAnswer": {
+      "q": ""
+    },
+    "multiAnswers": null,
+    "image": null
+  },
+  {
+    "id": 12,
+    "type": "text-choice",
+    "title": "心臟",
+    "content": "<p>人體中負責傳送血液的器官是？</p>",
+    "correctAnswer": {
+      "q": "B"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "胃",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "心臟",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "肝臟",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "肺",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "type": "text-choice",
+    "title": "冰塊融化",
+    "content": "<p>冰塊放在室溫環境下會變成什麼？</p>",
+    "correctAnswer": {
+      "q": "B"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "水蒸氣",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "水",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "冰",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "霜",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "type": "text-choice",
+    "title": "草食動物",
+    "content": "<p>下列哪一項是草食性動物？</p>",
+    "correctAnswer": {
+      "q": "B"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "獅子",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "馬",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "老虎",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "狼",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "type": "text-choice",
+    "title": "颱風",
+    "content": "<p>在澳門，熱帶氣旋又被稱作甚麼？</p>",
+    "correctAnswer": {
+      "q": "C"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "暴雨",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "下雪",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "颱風",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "起霧",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "type": "fill-blank",
+    "title": "植物生長條件",
+    "content": "<p>一棵樹的生長需要哪些條件？寫出兩個。</p>",
+    "correctAnswer": {
+      "q": "陽光"
+    },
+    "multiAnswers": {
+      "q": [
+        "陽光",
+        "水"
+      ]
+    },
+    "image": null
+  },
+  {
+    "id": 17,
+    "type": "text-choice",
+    "title": "導電體",
+    "content": "<p>哪一個是導電體？</p>",
+    "correctAnswer": {
+      "q": "B"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "橡皮擦",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "鐵釘",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "塑膠尺",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "玻璃杯",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "type": "text-choice",
+    "title": "燃燒需要",
+    "content": "<p>蠟燭燃燒時，需要哪一種氣體？</p>",
+    "correctAnswer": {
+      "q": "B"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "二氧化碳",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "氧氣",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "氮氣",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "氫氣",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "type": "text-choice",
+    "title": "影子",
+    "content": "<p>什麼是「影子」形成的原因？</p>",
+    "correctAnswer": {
+      "q": "A"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "光線被物體擋住",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "物體自身發光",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "光線直接穿過物體",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "物體會變黑",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "type": "short-answer",
+    "title": "保護色",
+    "content": "<p>寫出一種具有「保護色」的動物。</p>",
+    "correctAnswer": {
+      "q": ""
+    },
+    "multiAnswers": null,
+    "image": null
+  },
+  {
+    "id": 21,
+    "type": "text-choice",
+    "title": "水星",
+    "content": "<p>下面哪一個行星離太陽最近？</p>",
+    "correctAnswer": {
+      "q": "C"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "地球",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "金星",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "水星",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "火星",
+        "image": ""
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "type": "text-choice",
+    "title": "仙人掌",
+    "content": "<p>為甚麼仙人掌的葉子是尖刺狀？</p>",
+    "correctAnswer": {
+      "q": "C"
+    },
+    "multiAnswers": null,
+    "image": null,
+    "options": [
+      {
+        "label": "A",
+        "value": "A",
+        "text": "減少營養流失",
+        "image": ""
+      },
+      {
+        "label": "B",
+        "value": "B",
+        "text": "增加吸引空氣中水分的機會",
+        "image": ""
+      },
+      {
+        "label": "C",
+        "value": "C",
+        "text": "減少水分流失",
+        "image": ""
+      },
+      {
+        "label": "D",
+        "value": "D",
+        "text": "怕太陽曬",
+        "image": ""
+      }
+    ]
+  }
+]

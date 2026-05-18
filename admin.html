@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>題庫管理後台 · 三年級科學模擬測驗</title>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; }
+        body { background: #d0deeb; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        
+        .container {
+            background: white; width: 800px; max-width: 96%; border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #0b3b5c, #1a4e6f); color: white;
+            padding: 24px 32px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .header h1 { font-size: 1.5rem; }
+        .header .logout-btn {
+            background: rgba(255,255,255,0.15); color: white; border: 2px solid rgba(255,255,255,0.3);
+            padding: 8px 20px; border-radius: 30px; cursor: pointer; font-size: 0.9rem;
+        }
+        
+        .login-panel {
+            padding: 60px 40px; text-align: center;
+        }
+        .login-panel h2 { color: #0b3b5c; font-size: 1.8rem; margin-bottom: 32px; }
+        .login-panel input {
+            width: 300px; padding: 16px 24px; font-size: 1.2rem; border: 2px solid #b8cadc;
+            border-radius: 60px; outline: none; text-align: center;
+        }
+        .login-panel input:focus { border-color: #1e6fd9; box-shadow: 0 0 0 4px rgba(30,111,217,0.15); }
+        .login-panel button {
+            display: block; margin: 24px auto 0; background: #1e6fd9; color: white;
+            font-size: 1.2rem; font-weight: 600; padding: 14px 40px; border: none;
+            border-radius: 60px; cursor: pointer;
+        }
+        .login-panel .error { color: #c44536; margin-top: 16px; }
+        
+        .admin-body { display: none; padding: 32px; }
+        
+        .section {
+            background: #f9fcff; border: 1px solid #cfdeed; border-radius: 20px;
+            padding: 24px; margin-bottom: 24px;
+        }
+        .section h3 { color: #0b3b5c; margin-bottom: 16px; font-size: 1.2rem; }
+        
+        .upload-area {
+            border: 2px dashed #b8cadc; border-radius: 20px; padding: 40px;
+            text-align: center; cursor: pointer; transition: 0.2s;
+        }
+        .upload-area:hover { border-color: #1e6fd9; background: #f0f4f8; }
+        .upload-area input { display: none; }
+        .upload-area .icon { font-size: 3rem; margin-bottom: 12px; }
+        .upload-area p { color: #5b7a94; }
+        
+        .status-bar {
+            display: flex; gap: 16px; margin-top: 20px; flex-wrap: wrap;
+        }
+        .status-item {
+            background: white; border: 1px solid #cfdeed; border-radius: 16px;
+            padding: 12px 20px; font-size: 0.95rem;
+        }
+        .status-item .label { color: #5b7a94; font-size: 0.85rem; }
+        .status-item .value { color: #0b3b5c; font-weight: 600; }
+        
+        .btn {
+            padding: 12px 28px; font-size: 1rem; border-radius: 30px; border: none;
+            cursor: pointer; font-weight: 600; transition: 0.1s;
+        }
+        .btn-primary { background: #1e6fd9; color: white; }
+        .btn-primary:hover { background: #0b5bbb; }
+        .btn-success { background: #2a9d8f; color: white; }
+        .btn-success:hover { background: #1f7e72; }
+        .btn-danger { background: #c44536; color: white; }
+        .btn-danger:hover { background: #a03020; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .log-area {
+            background: #1a2a3a; color: #e0e5ec; border-radius: 16px;
+            padding: 16px; font-family: 'Courier New', monospace; font-size: 0.85rem;
+            max-height: 200px; overflow-y: auto; margin-top: 16px;
+        }
+        .log-area .success { color: #2a9d8f; }
+        .log-area .error { color: #c44536; }
+        .log-area .info { color: #f8ffb0; }
+        
+        .instructions {
+            background: #fff9e6; border: 1px solid #f0d060; border-radius: 16px;
+            padding: 20px; margin-top: 20px;
+        }
+        .instructions h4 { color: #8a6d00; margin-bottom: 12px; }
+        .instructions ol { padding-left: 20px; color: #5b7a94; line-height: 1.8; }
+        .instructions code {
+            background: #f0f4f8; padding: 2px 8px; border-radius: 4px;
+            font-size: 0.9rem; color: #1e6fd9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1> 題庫管理後台</h1>
+        <button class="logout-btn" id="logoutBtn" style="display:none;" onclick="logout()">登出</button>
+    </div>
+    
+    <!-- Login Panel -->
+    <div class="login-panel" id="loginPanel">
+        <h2>🔐 管理員驗證</h2>
+        <input type="password" id="adminPwd" placeholder="請輸入管理員密碼" onkeydown="if(event.key==='Enter')login()">
+        <button onclick="login()">登入</button>
+        <div class="error" id="loginError"></div>
+    </div>
+    
+    <!-- Admin Body -->
+    <div class="admin-body" id="adminBody">
+        <!-- Upload Section -->
+        <div class="section">
+            <h3>📤 上傳題庫 XLSX</h3>
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('xlsxInput').click()">
+                <div class="icon">📁</div>
+                <p>點擊此處或拖放 XLSX 檔案</p>
+                <p style="font-size:0.85rem;color:#9aaebb;margin-top:8px;">支援格式：questions.xlsx</p>
+                <input type="file" id="xlsxInput" accept=".xlsx" onchange="handleFileSelect(event)">
+            </div>
+            <div class="status-bar" id="statusBar" style="display:none;">
+                <div class="status-item">
+                    <div class="label">檔案名稱</div>
+                    <div class="value" id="fileName">—</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">檔案大小</div>
+                    <div class="value" id="fileSize">—</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">題目數量</div>
+                    <div class="value" id="questionCount">—</div>
+                </div>
+            </div>
+            <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+                <button class="btn btn-primary" id="uploadBtn" onclick="uploadToGitHub()" disabled>📤 上傳到 GitHub</button>
+                <button class="btn btn-success" id="previewBtn" onclick="previewQuestions()" disabled>👁️ 預覽題庫</button>
+            </div>
+            <div class="log-area" id="logArea" style="display:none;"></div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="instructions">
+            <h4>📖 使用說明</h4>
+            <ol>
+                <li>準備好 <code>questions.xlsx</code> 檔案（可從後台「匯出 XLSX」取得範本）</li>
+                <li>點擊上方上傳區域選擇檔案</li>
+                <li>確認題目數量無誤後，點擊「上傳到 GitHub」</li>
+                <li>系統會自動觸發 GitHub Actions，約 1-2 分鐘後題庫更新生效</li>
+                <li>學生端會自動載入最新題庫</li>
+            </ol>
+            <p style="margin-top:12px;color:#8a6d00;font-size:0.9rem;">
+                ⚠️ 注意：上傳後請等待 GitHub Actions 完成處理，期間學生可能看到舊題庫。
+            </p>
+        </div>
+        
+        <!-- Quick Links -->
+        <div class="section" style="margin-top:24px;">
+            <h3>🔗 快速連結</h3>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="/" class="btn btn-primary" style="text-decoration:none;"> 學生測驗頁面</a>
+                <a href="https://github.com/14211-star/science-quiz" target="_blank" class="btn btn-success" style="text-decoration:none;"> GitHub 倉儲</a>
+                <a href="https://github.com/14211-star/science-quiz/actions" target="_blank" class="btn btn-success" style="text-decoration:none;">⚡ Actions 狀態</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const ADMIN_PASSWORD = 'admin123';
+const GH_REPO = '14211-star/science-quiz';
+let selectedFile = null;
+let questionCount = 0;
+
+function login() {
+    const pwd = document.getElementById('adminPwd').value;
+    if (pwd === ADMIN_PASSWORD) {
+        document.getElementById('loginPanel').style.display = 'none';
+        document.getElementById('adminBody').style.display = 'block';
+        document.getElementById('logoutBtn').style.display = 'block';
+        sessionStorage.setItem('adminLoggedIn', 'true');
+    } else {
+        document.getElementById('loginError').textContent = '密碼錯誤';
+    }
+}
+
+function logout() {
+    sessionStorage.removeItem('adminLoggedIn');
+    location.reload();
+}
+
+// Check session
+if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+    document.getElementById('loginPanel').style.display = 'none';
+    document.getElementById('adminBody').style.display = 'block';
+    document.getElementById('logoutBtn').style.display = 'block';
+}
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    selectedFile = file;
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+    document.getElementById('statusBar').style.display = 'flex';
+    
+    // Parse XLSX to count questions
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+            const ws = wb.Sheets[wb.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+            questionCount = rows.length - 1; // Exclude header
+            document.getElementById('questionCount').textContent = questionCount + ' 題';
+            document.getElementById('uploadBtn').disabled = false;
+            document.getElementById('previewBtn').disabled = false;
+        } catch(err) {
+            document.getElementById('questionCount').textContent = '解析失敗';
+        }
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+// Drag and drop support
+const uploadArea = document.getElementById('uploadArea');
+uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = '#1e6fd9';
+    uploadArea.style.background = '#f0f4f8';
+});
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.style.borderColor = '#b8cadc';
+    uploadArea.style.background = '';
+});
+uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = '#b8cadc';
+    uploadArea.style.background = '';
+    const file = e.dataTransfer.files[0];
+    if (file && file.name.endsWith('.xlsx')) {
+        document.getElementById('xlsxInput').files = e.dataTransfer.files;
+        handleFileSelect({ target: { files: [file] } });
+    }
+});
+
+function log(msg, type = 'info') {
+    const logArea = document.getElementById('logArea');
+    logArea.style.display = 'block';
+    const cls = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+    logArea.innerHTML += `<div class="${cls}">[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+    logArea.scrollTop = logArea.scrollHeight;
+}
+
+async function getGitHubToken() {
+    // Try to get token from GitHub Secrets via a secure method
+    // For now, we'll prompt the user to enter their token
+    // In production, this should be handled by a backend or GitHub App
+    
+    const stored = sessionStorage.getItem('ghToken');
+    if (stored) return stored;
+    
+    const token = prompt('請輸入 GitHub Personal Access Token：\n\n' +
+        '1. 前往 https://github.com/settings/tokens\n' +
+        '2. 點擊 "Generate new token (classic)"\n' +
+        '3. 勾選 "repo" 權限\n' +
+        '4. 複製 token 並貼上至此\n\n' +
+        'Token 僅會儲存在此瀏覽器 session 中，關閉頁面後會清除。');
+    
+    if (token) {
+        sessionStorage.setItem('ghToken', token);
+        return token;
+    }
+    return null;
+}
+
+async function uploadToGitHub() {
+    if (!selectedFile) {
+        alert('請先選擇檔案');
+        return;
+    }
+    
+    const token = await getGitHubToken();
+    if (!token) {
+        alert('需要 GitHub Token 才能上傳');
+        return;
+    }
+    
+    const uploadBtn = document.getElementById('uploadBtn');
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = '⏳ 上傳中...';
+    
+    log('開始上傳 ' + selectedFile.name + '...');
+    
+    try {
+        // Read file as base64
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const base64 = btoa(String.fromCharCode(...new Uint8Array(e.target.result)));
+            
+            // Get existing file SHA
+            log('獲取現有檔案資訊...');
+            const apiUrl = `https://api.github.com/repos/${GH_REPO}/contents/questions.xlsx`;
+            
+            const getResp = await fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            
+            let sha = '';
+            if (getResp.ok) {
+                const existing = await getResp.json();
+                sha = existing.sha || '';
+                log('找到現有檔案，SHA: ' + sha.substring(0, 8) + '...');
+            } else {
+                log('未找到現有檔案，將建立新檔案');
+            }
+            
+            // Upload new file
+            log('上傳新題庫...');
+            const putResp = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `Update question bank (${questionCount} questions)`,
+                    content: base64,
+                    sha: sha || undefined
+                })
+            });
+            
+            if (!putResp.ok) {
+                const err = await putResp.json();
+                throw new Error(err.message || `HTTP ${putResp.status}`);
+            }
+            
+            log('✅ 題庫已成功上傳到 GitHub！', 'success');
+            log('⏳ GitHub Actions 將自動處理，約 1-2 分鐘後生效', 'info');
+            
+            uploadBtn.textContent = '✅ 上傳成功';
+            setTimeout(() => {
+                uploadBtn.textContent = '📤 上傳到 GitHub';
+                uploadBtn.disabled = false;
+            }, 3000);
+            
+        };
+        reader.readAsArrayBuffer(selectedFile);
+        
+    } catch(err) {
+        log(' 上傳失敗：' + err.message, 'error');
+        uploadBtn.textContent = ' 上傳失敗';
+        uploadBtn.disabled = false;
+        setTimeout(() => {
+            uploadBtn.textContent = '📤 上傳到 GitHub';
+        }, 3000);
+    }
+}
+
+function previewQuestions() {
+    if (!selectedFile) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+            const ws = wb.Sheets[wb.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+            
+            let preview = ' 題庫預覽：\n\n';
+            for (let i = 1; i < Math.min(rows.length, 6); i++) {
+                const row = rows[i];
+                preview += `#${row[0]} [${row[1]}] ${row[2]}\n`;
+                preview += `   答案：${row[8] || '—'}\n\n`;
+            }
+            if (rows.length > 6) {
+                preview += `... 還有 ${rows.length - 6} 題\n`;
+            }
+            
+            alert(preview);
+        } catch(err) {
+            alert('預覽失敗：' + err.message);
+        }
+    };
+    reader.readAsArrayBuffer(selectedFile);
+}
+</script>
+
+</body>
+</html>

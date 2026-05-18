@@ -20,7 +20,7 @@
 
 ---
 
-##  功能總覽
+## 📚 功能總覽
 
 ### 學生測驗
 
@@ -50,7 +50,7 @@
 
 ---
 
-##  XLSX 題庫格式
+## 📋 XLSX 題庫格式
 
 匯出的 `questions.xlsx` 包含以下欄位，可直接用 Excel 編輯：
 
@@ -116,7 +116,7 @@ science-quiz/
 │       └── sync.yml        ← GitHub Actions 工作流程
 └── scripts/
     ├── parse_xlsx.py       ← XLSX 解析腳本（Actions 使用）
-    ─ generate_initial_xlsx.py  ← 生成初始題庫（一次性）
+    ── generate_initial_xlsx.py  ← 生成初始題庫（一次性）
 ```
 
 ---
@@ -143,6 +143,6 @@ science-quiz/
 
 ---
 
-##  支援
+## 📞 支援
 
 如有問題，請前往 [GitHub Issues](https://github.com/14211-star/science-quiz/issues) 回報。
