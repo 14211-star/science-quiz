@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EdgeOne Pages 測試</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-white to-indigo-50 min-h-screen">
+    <nav class="bg-white/80 backdrop-blur-sm shadow-sm border-b border-indigo-100 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-sm">EO</span>
+                </div>
+                <span class="font-semibold text-gray-700">EdgeOne Pages 測試</span>
+            </div>
+            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium flex items-center gap-1">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                Deploying...
+            </span>
+        </div>
+    </nav>
+
+    <header class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium mb-6 border border-indigo-200">
+            <span>⚡</span>
+            <span>EdgeOne Pages · MCP 部署成功</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
+            🚀 歡迎來到
+            <span class="bg-gradient-to-r from-indigo-600 to-purple-500 bg-clip-text text-transparent">EdgeOne Pages</span>
+        </h1>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto mb-8">
+            這是由 AI 生成的測試頁面，透過 EdgeOne Makers MCP 一鍵部署。<br>
+            純靜態網站，全球邊緣節點加速。
+        </p>
+        <div class="flex items-center justify-center gap-3 flex-wrap">
+            <span class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-600 shadow-sm flex items-center gap-2">⚡ Tailwind CSS</span>
+            <span class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-600 shadow-sm flex items-center gap-2">📱 響應式設計</span>
+            <span class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-600 shadow-sm flex items-center gap-2">🌐 邊緣加速</span>
+        </div>
+    </header>
+
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-4 text-2xl">📦</div>
+                <h3 class="font-semibold text-gray-900 mb-2">MCP 一鍵部署</h3>
+                <p class="text-sm text-gray-500">透過 EdgeOne Makers MCP，無需手動上傳，一行指令完成部署。</p>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4 text-2xl">⚡</div>
+                <h3 class="font-semibold text-gray-900 mb-2">全球邊緣加速</h3>
+                <p class="text-sm text-gray-500">EdgeOne 全球節點分發，確保各地訪問低延遲、高可用。</p>
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mb-4 text-2xl">🎯</div>
+                <h3 class="font-semibold text-gray-900 mb-2">適合教學用途</h3>
+                <p class="text-sm text-gray-500">小學資訊課工具頁、測驗頁、展示頁，快速部署隨時更新。</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-white border-t border-gray-100">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-gray-400">
+            <p>© 2026 資訊老師 · EdgeOne Pages 測試 · 由 AI + EdgeOne MCP 自動部署</p>
+            <p class="mt-1 text-xs text-gray-300" id="deploy-info">部署時間：—</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('deploy-info').textContent =
+            '部署時間：' + new Date().toLocaleString('zh-HK', { timeZone: 'Asia/Hong_Kong' });
+    </script>
+</body>
+</html>
